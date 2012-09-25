@@ -1,26 +1,26 @@
 #!/bin/bash
 
-PATH=`pwd`
+PWD=`pwd`
 MULTISTRAP_DIR=armhf-debian
 MULTISTRAP_CONF=multi.conf
 
-echo $PATH $MULTISTRAP_DIR $MULTISTRAP_CONF
+echo $PWD$MULTISTRAP_DIR $MULTISTRAP_CONF
 
 function multistrap(){
-        echo "multistrapping system";
-	/usr/sbin/multistrap -f $MULTISTRAP_CONF;
+        echo -e "multistrapping system with options\n\t-d $PWD/$MULTISTRAP_DIR -f $MULTISTRAP_CONF\n";
+	/usr/sbin/multistrap -d $PWD/$MULTISTRAP_DIR -f $MULTISTRAP_CONF;
 }
 
 function panda(){
         echo "configuring pandaboard"
-	rsync -a generic/ debian/
-	rsync -a panda/ debian/
+	rsync -a $PWD/generic/  $PWD/$MULTISTRAP
+	rsync -a $PWD/panda/ $PWD/$MULTISTRAP
 }
 
 function toradex(){
         echo "configuring pandaboard"
-        rsync -a generic/ debian/
-        rsync -a toradex/ debian/
+        rsync -a $PWD/generic/ $PWD/$MULTISTRAP
+        rsync -a $PWD/toradex/ $PWD/$MULTISTRAP
 }
 
 function usage(){
