@@ -5,3 +5,5 @@ kernel/t20/*
 
 u-boot/panda/*
 u-boot/t20/*
+
+var/cache/linux*
