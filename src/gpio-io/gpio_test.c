@@ -12,24 +12,21 @@
 static void timer_oscillateur(unsigned long);
 static struct timer_list timer;
 
-// 138 Broche 10 du port J3 (Expansion A) de la Pandaboard
-#define GPIO_OSCILLATEUR 138
-
 static int __init init_gpio_test (void)
 {
 	int err;
 	
-	if ((err = gpio_request(GPIO_OSCILLATEUR, THIS_MODULE->name)) != 0) {
+	if ((err = gpio_request(LED1, THIS_MODULE->name)) != 0) {
 		return err;
 	}
-	if ((err = gpio_direction_output(GPIO_OSCILLATEUR, 1)) != 0) {
-		gpio_free(GPIO_OSCILLATEUR);
+	if ((err = gpio_direction_output(LED1, 1)) != 0) {
+		gpio_free(LED1);
 		return err;
 	}
 	init_timer (& timer);
 	timer.function = timer_oscillateur;
 	timer.data = 0;
-	timer.expires = jiffies + HZ/1000;
+	timer.expires = jiffies + HZ/10;
 	add_timer(& timer);
 	
 	return 0; 
@@ -39,16 +36,16 @@ static int __init init_gpio_test (void)
 static void __exit exit_gpio_test (void)
 {
 	del_timer(& timer);
-	gpio_free(GPIO_OSCILLATEUR);
+	gpio_free(LED1);
 }
 
 
 static void timer_oscillateur(unsigned long unused)
 {
 	static int value = 0;
-	gpio_set_value(GPIO_OSCILLATEUR, value);
+	gpio_set_value(LED1, value);
 	value = 1 - value;
-	mod_timer(& timer, jiffies + HZ/1000);
+	mod_timer(& timer, jiffies + HZ/00);
 }
 
 
