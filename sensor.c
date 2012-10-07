@@ -5,7 +5,7 @@
  * Author: Jan Müller
  * Mail: jan.mueller.online@googlemail.com
  * Created: Okt 07 2012 17:10:06
- * Last Changes: Oct 07 2012 17:55:33
+ * Last Changes: Oct 07 2012 18:03:35
  * Description:
  *            
  *************************************************************************/
@@ -89,9 +89,9 @@ int main(int argc, char *argv[]){
 	int gpio = 14;
 	FILE * fp;
 
-	_gpio_export(fp, path[256], gpio);
+	_gpio_export(fp, path, gpio);
 
-	_gpio_direction(fp, path[256], gpio, 1);
+	_gpio_direction(fp, path, gpio, 1);
 	
 	snprintf(path, 256, "/sys/class/gpio/gpio%d/value", gpio);
     	if ((fp = fopen(path, "w")) == NULL) {
@@ -110,10 +110,10 @@ int main(int argc, char *argv[]){
 
 	fclose(fp);
 
-	_gpio_direction(fp, path[256], gpio, 0);
+	_gpio_direction(fp, path, gpio, 0);
 	
 	
-	_gpio_unexport(fp, path[256], gpio);
+	_gpio_unexport(fp, path, gpio);
 	
 	return 0;
 }
