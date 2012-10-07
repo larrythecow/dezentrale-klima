@@ -1,5 +1,5 @@
 ifneq (${KERNELRELEASE},)
-	obj-m += gpio-io.o
+	obj-m += gpio_test.o
 
 else
 	ARCH ?=
