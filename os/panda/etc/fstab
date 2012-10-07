@@ -1,4 +1,0 @@
-# NOTE: If your BOOT partition is ReiserFS, add the notail option to opts.
-/dev/mmcblk0p1		/boot		vfat		noauto,noatime	1 2
-/dev/mmcblk0p2		/		ext4		noatime		0 1
-

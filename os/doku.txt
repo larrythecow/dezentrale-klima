@@ -1,7 +1,0 @@
-todo:
-/dev from 
-T20_LinuxImageV2.0/rootfs/dev/
-and gentoo
-
-cp debian/usr/share/base-passwd/group.master generic/etc/group
-cp debian/usr/share/base-passwd/passwd.master generic/etc/passwd
