@@ -1,8 +1,7 @@
 #! /bin/sh
-
 #http://www.blaess.fr/christophe/2012/05/09/gpio-pandaboard-temps-reel-1/
 
-GPIO=138  # Broche 10 du port "Expansion A"
+GPIO=$1  # Broche 10 du port "Expansion A"
 
 cd /sys/class/gpio
 
