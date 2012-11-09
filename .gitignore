@@ -5,4 +5,6 @@ u-boot/panda/*
 u-boot/t20/*
 var/cache/linux*
 
+
+oscillateur-gpio-timer/
 .*
