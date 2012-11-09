@@ -5,6 +5,8 @@ u-boot/panda/*
 u-boot/t20/*
 var/cache/linux*
 
-
+gpio-freq/nbproject/*
 oscillateur-gpio-timer/
 .*
+
+*.mk
