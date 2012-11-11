@@ -1,13 +1,19 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <unistd.h>
+#include <string.h>
+
 #include <sys/inotify.h>
+#include <fcntl.h>
+#include <errno.h>
+
 #include "global.h"
 #include "file.h"
 
 /*###########################################################################
 file open 
 ###########################################################################*/
-FILE * fileopen(const char *filename, const char *modes, const char *message) {
+FILE * fileOpen(const char *filename, const char *modes, const char *message) {
     static FILE *fp;
 #ifdef DEBUGFILE
     printf("\ttry to open:\t%s\n", filename);
@@ -27,9 +33,30 @@ FILE * fileopen(const char *filename, const char *modes, const char *message) {
 /*###########################################################################
 file close
 ###########################################################################*/
-int fileclose(FILE *fp, const char *message) {
+int fileClose(FILE *fp, const char *message) {
     if (fclose(fp) == EOF) {
         printf("\t\tWARNING: Could not close:\t%s\n", message);
     }
     return 0;
 }
+
+int fcntlOpen(const char *__file, int __oflag, mode_t __mode) {
+    static int fd;
+    if ((fd = open(__file, __oflag, __mode)) == -1) {
+        printf("ERROR: fcntlOpen: could not open %s@%d\n", __file, fd);
+        exit(-1);
+    } else if ((errno =! NULL)) {
+        printf("WARNING: fcntlOpen: %s\terrno: %d\n", __file, errno);
+        printf("\tshould be fixed!\n");
+    }
+    return fd;
+}
+
+int fcntlClose(int fd) {
+    if (close(fd) == -1) {
+        printf("ERROR: fcntlClose: could close: errno: %d\n", errno);
+        exit(-1);
+    }
+    return 0;
+}
+

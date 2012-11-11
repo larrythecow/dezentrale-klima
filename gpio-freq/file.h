@@ -8,8 +8,10 @@
 #ifndef FILE_H
 #define	FILE_H
 
-FILE * fileopen(const char *filename, const char *modes, const char *message);
-int fileclose(FILE *fp, const char *message);
+FILE * fileOpen(const char *filename, const char *modes, const char *message);
+int fileClose(FILE *fp, const char *message);
+int fcntlOpen(const char *__file, int __oflag, mode_t __mode);
+int fcntlClose(int fd);
 
 #endif	/* FILE_H */
 

@@ -14,7 +14,7 @@
 #include "gpio_fcntl.h"
 
 //#include <sys/io.h>
-//#include <sys/inotify.h>
+#include <sys/inotify.h>
 //#include <sys/types.h>
 //#include <sys/stat.h>
 
@@ -63,14 +63,14 @@ int main(int argc, char** argv) {
     timer.tv_sec++; // Start after one second.
 
     t1 = clock();
-    for (i = 0; i < 1000000; i++) {
+    for (i = 0; i < 100; i++) {
         clock_nanosleep(0, TIMER_ABSTIME, &timer, NULL);
         gpioSetValue(&gpio_led1, i % 2);
         timer.tv_nsec += interval;
         tsnorm(&timer);
     }
     t2 = clock();
-    printf("needed %f time", ((float) t2 - (float) t1) / 1000000.0F);
+    printf("needed %f s for %d runs\n", ((float) t2 - (float) t1) / 1000000.0F, i);
 
     gpioCloseValue(&gpio_led1);
     gpioUnexport(&gpio_led1);

@@ -4,57 +4,46 @@
 #include <string.h>
 #include <fcntl.h>
 #include <unistd.h>
+#include <errno.h>
 
 #include "global.h"
 #include "gpio_fcntl.h"
-#include <errno.h>
+#include "file.h"
 
 char buffer[DIMCHAR];
 
 int gpioExport(gpio_t *gpio) {
-    if ((gpio->fd = open(EXPORT, O_WRONLY | O_NDELAY, 0)) == -1) {
-        printf("could not export %d\n", gpio->id);
-        exit(-1);
-    } else if (errno = !NULL) {
-        printf("WARNING: gpioExport: %d\n", errno);
-        //perror("Warning: already exported?");
-    }
-
     snprintf(buffer, DIMCHAR, "%d", gpio->id);
+    gpio->fd = fcntlOpen(EXPORT, O_WRONLY | O_NDELAY, 0);
     write(gpio->fd, buffer, strlen(buffer));
-    close(gpio->fd);
+    fcntlClose(gpio->fd);
     snprintf(gpio->path, DIMCHAR, "%sgpio%d/", PATH, gpio->id);
 
     return errno;
 }
 
 int gpioUnexport(gpio_t *gpio) {
-    if ((gpio->fd = open(UNEXPORT, O_WRONLY | O_NDELAY, 0)) == -1) {
-        printf("could not unexport %d\n", gpio->id);
-        exit(-1);
-    } else {
-        snprintf(buffer, DIMCHAR, "%d", gpio->id);
-        write(gpio->fd, buffer, strlen(buffer));
-        close(gpio->fd);
-        snprintf(gpio->path, DIMCHAR, "\0");
-    }
+    snprintf(buffer, DIMCHAR, "%d", gpio->id);
+    gpio->fd = fcntlOpen(UNEXPORT, O_WRONLY | O_NDELAY, 0);
+    write(gpio->fd, buffer, strlen(buffer));
+    fcntlClose(gpio->fd);
+    snprintf(gpio->path, DIMCHAR, "\0");
+
     return errno;
 }
 
 int gpioDir(gpio_t *gpio, int dir) {
     snprintf(buffer, DIMCHAR, "%sdirection", gpio->path);
-    if ((gpio->fd = open(buffer, O_WRONLY | O_NDELAY, 0)) == -1) {
-        printf("could not open dir");
-        exit(-1);
+    gpio->fd = fcntlOpen(buffer, O_WRONLY | O_NDELAY, 0);
+
+    if (dir >= 0) {
+        snprintf(buffer, DIMCHAR, "%s", "out");
     } else {
-        if (dir >= 0) {
-            snprintf(buffer, DIMCHAR, "%s", "out");
-        } else {
-            snprintf(buffer, DIMCHAR, "%s", "in");
-        }
-        write(gpio->fd, buffer, strlen(buffer));
-        close(gpio->fd);
+        snprintf(buffer, DIMCHAR, "%s", "in");
     }
+    write(gpio->fd, buffer, strlen(buffer));
+    fcntlClose(gpio->fd);
+
     return errno;
 }
 
@@ -71,15 +60,13 @@ int gpioSwapValue(gpio_t *gpio) {
 
 int gpioOpenValue(gpio_t *gpio) {
     snprintf(buffer, DIMCHAR, "%svalue", gpio->path);
-    if ((gpio->fd = open(buffer, O_WRONLY | O_NDELAY, 0)) == -1) {
-        printf("could not value\n");
-        exit(-1);
-    }
+    gpio->fd = fcntlOpen(buffer, O_WRONLY | O_NDELAY, 0);
+
     return errno;
 }
 
 int gpioCloseValue(gpio_t *gpio) {
-    close(gpio->fd);
+    fcntlClose(gpio->fd);
     return errno;
 }
 
