@@ -11,19 +11,16 @@
 #define DIMCHAR 265
 //#define DEBUGFILE 1
 #define PATH "/sys/class/gpio/"
-
-/* 
- * darf ein fp/fd mehrmals verwendet werden
- * oder sollte jeweils ein eigener angelegt werden 
- * (fdValue, fdExport, fdUnexport
- */
+#define EXPORT "/sys/class/gpio/export"
+#define UNEXPORT "/sys/class/gpio/unexport"
+#define NSEC_PER_SEC    1000000000
 
 typedef struct {
     char name[DIMCHAR];
     int id ;
     char dir[4];
     char path[DIMCHAR];
-    FILE * fp;
+//    FILE * fp;
     int fd;
     int (*test)();
 } gpio_t;

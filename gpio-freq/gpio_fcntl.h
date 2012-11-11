@@ -12,7 +12,7 @@
 
 
 int gpioExport(gpio_t *gpio);
-int gpioDir(gpio_t *gpio);
+int gpioDir(gpio_t *gpio, int dir);
 int gpioSetValue(gpio_t *gpio, unsigned short int value);
 int gpioSwapValue(gpio_t *gpio);
 int gpioUnexport(gpio_t *gpio);

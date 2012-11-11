@@ -6,7 +6,8 @@ u-boot/t20/*
 var/cache/linux*
 
 gpio-freq/nbproject/*
+gpio-freq/build/
 oscillateur-gpio-timer/
 .*
-
+a.out
 *.mk
