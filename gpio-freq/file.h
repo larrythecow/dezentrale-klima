@@ -13,5 +13,7 @@ int fileClose(FILE *fp, const char *message);
 int fcntlOpen(const char *__file, int __oflag, mode_t __mode);
 int fcntlClose(int fd);
 
+int watchFile();
+
 #endif	/* FILE_H */
 

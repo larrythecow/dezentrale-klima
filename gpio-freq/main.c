@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <time.h>
 #include <sched.h>
+#include <pthread.h>
 
 #include <sys/io.h>
 #include <unistd.h>
@@ -12,6 +13,7 @@
 
 #include "global.h"
 #include "gpio_fcntl.h"
+#include "file.h"
 
 //#include <sys/io.h>
 #include <sys/inotify.h>
@@ -21,6 +23,8 @@
 /*
  * 
  */
+
+pthread_mutex_t mutex1 = PTHREAD_MUTEX_INITIALIZER;
 
 /* using clock_nanosleep of librt */
 extern int clock_nanosleep(clockid_t __clock_id, int __flags,
@@ -43,15 +47,34 @@ void setPriority(struct sched_param *param, int __sched_priority) {
     }
 }
 
+int blink(struct timespec * timer, gpio_t gpio, int interval) {
+    int i;
+    for (i = 0; i < 100; i++) {
+//        if (event.mask & IN_MODIFY) {
+//            printf("file was modified %s\n", event.name);
+//        }
+
+        clock_nanosleep(0, TIMER_ABSTIME, &timer, NULL);
+        gpioSetValue(&gpio, i % 2);
+        timer.tv_nsec += interval;
+        tsnorm(&timer);
+    }
+}
+
 int main(int argc, char** argv) {
+
+
     int i;
     clock_t t1, t2;
     gpio_t gpio_led1 = {"GPIO138 led1", 138, "out"};
+    pthread_t thread1, thread2;
+    int rc1, rc2;
 
     struct timespec timer;
     struct sched_param param;
     int interval = 1000; // 50000ns = 50us, cycle duration = 100us
-    
+    struct inotify_event event;
+
     setPriority(&param, 99);
 
     printf("hallo welt\n");
@@ -63,12 +86,10 @@ int main(int argc, char** argv) {
     timer.tv_sec++; // Start after one second.
 
     t1 = clock();
-    for (i = 0; i < 100; i++) {
-        clock_nanosleep(0, TIMER_ABSTIME, &timer, NULL);
-        gpioSetValue(&gpio_led1, i % 2);
-        timer.tv_nsec += interval;
-        tsnorm(&timer);
-    }
+ if( (rc1=pthread_create( &thread1, NULL, &blink, (void*)(&timer, &gpio_led1, interval)) ))
+   {
+      printf("Thread creation failed:\n");
+   }
     t2 = clock();
     printf("needed %f s for %d runs\n", ((float) t2 - (float) t1) / 1000000.0F, i);
 

@@ -10,9 +10,11 @@
 #include "global.h"
 #include "file.h"
 
-/*###########################################################################
-file open 
-###########################################################################*/
+/*
+ * ###########################################################################
+ * stdio.h file implementation
+ * ###########################################################################
+ */
 FILE * fileOpen(const char *filename, const char *modes, const char *message) {
     static FILE *fp;
 #ifdef DEBUGFILE
@@ -30,9 +32,6 @@ FILE * fileOpen(const char *filename, const char *modes, const char *message) {
     return fp;
 }
 
-/*###########################################################################
-file close
-###########################################################################*/
 int fileClose(FILE *fp, const char *message) {
     if (fclose(fp) == EOF) {
         printf("\t\tWARNING: Could not close:\t%s\n", message);
@@ -40,12 +39,18 @@ int fileClose(FILE *fp, const char *message) {
     return 0;
 }
 
+/*
+ * ###########################################################################
+ * fcntl.h file implementation
+ * ###########################################################################
+ */
+
 int fcntlOpen(const char *__file, int __oflag, mode_t __mode) {
     static int fd;
     if ((fd = open(__file, __oflag, __mode)) == -1) {
         printf("ERROR: fcntlOpen: could not open %s@%d\n", __file, fd);
         exit(-1);
-    } else if ((errno =! NULL)) {
+    } else if ((errno = !NULL)) {
         printf("WARNING: fcntlOpen: %s\terrno: %d\n", __file, errno);
         printf("\tshould be fixed!\n");
     }
@@ -60,3 +65,18 @@ int fcntlClose(int fd) {
     return 0;
 }
 
+/*
+ * ###########################################################################
+ * sys/inotify.h file watch implementation
+ * ###########################################################################
+ */
+int watchFile(struct inotify_event *event) {
+    static int fd;
+    
+    if ((fd = inotify_init()) <0) {
+        printf("ERROR: watchfile: errno: %d\n", errno);
+    }
+    printf("\tfd: %d\n", fd);
+    event->wd = inotify_add_watch(fd, "/sys/class/gpio/gpio138/value", IN_MODIFY);
+    printf("\twd: %d\n", event->wd);
+}

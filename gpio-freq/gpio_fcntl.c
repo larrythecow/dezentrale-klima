@@ -12,6 +12,11 @@
 
 char buffer[DIMCHAR];
 
+/*
+ * ###########################################################################
+ * export gpio
+ * ###########################################################################
+ */
 int gpioExport(gpio_t *gpio) {
     snprintf(buffer, DIMCHAR, "%d", gpio->id);
     gpio->fd = fcntlOpen(EXPORT, O_WRONLY | O_NDELAY, 0);
@@ -22,6 +27,11 @@ int gpioExport(gpio_t *gpio) {
     return errno;
 }
 
+/*
+ * ###########################################################################
+ * unexport gpio
+ * ###########################################################################
+ */
 int gpioUnexport(gpio_t *gpio) {
     snprintf(buffer, DIMCHAR, "%d", gpio->id);
     gpio->fd = fcntlOpen(UNEXPORT, O_WRONLY | O_NDELAY, 0);
@@ -32,6 +42,11 @@ int gpioUnexport(gpio_t *gpio) {
     return errno;
 }
 
+/*
+ * ###########################################################################
+ * set gpio direction in/out
+ * ###########################################################################
+ */
 int gpioDir(gpio_t *gpio, int dir) {
     snprintf(buffer, DIMCHAR, "%sdirection", gpio->path);
     gpio->fd = fcntlOpen(buffer, O_WRONLY | O_NDELAY, 0);
@@ -47,6 +62,11 @@ int gpioDir(gpio_t *gpio, int dir) {
     return errno;
 }
 
+/*
+ * ###########################################################################
+ * write 1/0
+ * ###########################################################################
+ */
 int gpioSetValue(gpio_t *gpio, unsigned short int value) {
     snprintf(buffer, DIMCHAR, "%d", value);
     write(gpio->fd, buffer, strlen(buffer));
