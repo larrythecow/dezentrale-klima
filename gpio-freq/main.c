@@ -69,7 +69,7 @@ int main(int argc, char** argv) {
 
     struct timespec timer;
     struct sched_param param;
-    int interval = 1000; // 50000ns = 50us, cycle duration = 100us
+    int interval = 5000; // 50000ns = 50us, cycle duration = 100us
     struct inotify_event event;
 
     setPriority(&param, 99);
@@ -85,7 +85,9 @@ int main(int argc, char** argv) {
     t1 = clock();
 
         t1 = clock();
-    for (i = 0; i < 100000; i++) {
+//    for (i = 0; i < 1000000; i++) {
+	while (1) {
+	i++;
         clock_nanosleep(0, TIMER_ABSTIME, &timer, NULL);
         gpioSetValue(&gpio_led1, i % 2);
         timer.tv_nsec += interval;
