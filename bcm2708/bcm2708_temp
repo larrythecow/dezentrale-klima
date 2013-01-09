@@ -37,7 +37,8 @@ None known
 
 =head1 AUTHOR
 
-Unknown
+sid@projekt-turm.de
+please also see LICENSE section
 
 =head1 LICENSE
 
@@ -62,10 +63,6 @@ if (defined $ARGV[0] && $ARGV[0] eq 'autoconf') {
     }
 }
 
-my $in;
-my @cpus;
-my @irqs;
-
 if (defined $ARGV[0] && $ARGV[0] eq 'config') {
 print <<EOM;
 graph_title Raspberry Pi CPU temperature
@@ -74,8 +71,13 @@ graph_vlabel graph_vlabel temp in °C
 graph_category sensors
 graph_info This graph shows the CPU temperature in degrees Celsius of a Raspberry Pi. 
 EOM
-} else {
-    print "cpu.value ", rand(10)+40 , "\n";
+} 
+else {
+	my $temp = `/opt/vc/bin/vcgencmd measure_temp`;
+	chomp($temp);
+	$temp=~s/temp=//;
+	$temp=~s/\'C//;
+	print "cpu.value ", $temp , "\n";
 }
 
 __END__
