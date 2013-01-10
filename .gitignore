@@ -1,13 +1,3 @@
-os/armhf-debian
-kernel/panda/*
-kernel/t20/*
-u-boot/panda/*
-u-boot/t20/*
-var/cache/linux*
+bcm2708/tmp/
 
-gpio-freq/nbproject/*
-gpio-freq/build/
-oscillateur-gpio-timer/
-.*
 a.out
-*.mk
