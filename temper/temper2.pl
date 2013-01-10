@@ -15,6 +15,10 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
+#** @file temper2.pl 
+# ........
+#* 
+
 use strict;
 use warnings;
 
@@ -43,6 +47,9 @@ our %config =(
     (graphFormat    => "svg")
     );
 
+#** @function public param @ARGV
+# ....
+#*    
 sub param(){
     foreach(@ARGV){
         my @tmp= split("=", "$_");

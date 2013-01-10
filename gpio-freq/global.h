@@ -25,6 +25,8 @@
 #define UNEXPORT "/sys/class/gpio/unexport"
 #define NSEC_PER_SEC    1000000000
 
+
+
 typedef struct {
     char name[DIMCHAR];
     int id ;
@@ -34,6 +36,10 @@ typedef struct {
     int fd;
     int (*test)();
 } gpio_t;
+/**
+* ... text gpio_t ...
+*/
+
 
 #endif	/* GLOBAL_H */
 
