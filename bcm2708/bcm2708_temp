@@ -66,11 +66,13 @@ if (defined $ARGV[0] && $ARGV[0] eq 'autoconf') {
 if (defined $ARGV[0] && $ARGV[0] eq 'config') {
 print <<EOM;
 graph_title Raspberry Pi CPU temperature
+graph_info This graph shows the CPU temperature in degrees Celsius of a Raspberry Pi.
+graph_category sensors
 graph_args --base 1000 -l 0
 graph_vlabel temp in °C 
-graph_category sensors
 cpu.label CPU Temperature
-graph_info This graph shows the CPU temperature in degrees Celsius of a Raspberry Pi. 
+cpu.warning 50.0
+cpu.critical 60.0
 EOM
 } 
 else {
