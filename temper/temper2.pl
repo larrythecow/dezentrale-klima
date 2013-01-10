@@ -15,6 +15,10 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
+#** @file temper2.pl read temperature from HidTemper and save them 
+# @brief saves data to RRD and generates SVG
+#* 
+
 use strict;
 use warnings;
 
@@ -23,12 +27,22 @@ use Fcntl;
 use FileHandle();
 use Device::USB::PCSensor::HidTEMPer;
 
+#** @var $temper stores sensor object
 my $temper = Device::USB::PCSensor::HidTEMPer->new();
+
+#** @var $sensor stores the connected sensor
 my $sensor = $temper->device();
+
+#** @var $err saves error
 my $err;
+
+#** @var $curTemp stores temperature
 my $curTemp;
+
+#** @var $DEBUG flag
 our $DEBUG=1;
 
+#** @var rrd configuration
 our %config =( 
     (filename       => "office"),
     (createDB       => 0),
@@ -43,6 +57,9 @@ our %config =(
     (graphFormat    => "svg")
     );
 
+#** @function public param @ARGV
+# ....
+#*    
 sub param(){
     foreach(@ARGV){
         my @tmp= split("=", "$_");
