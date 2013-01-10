@@ -34,7 +34,7 @@ my $temper = Device::USB::PCSensor::HidTEMPer->new();
 my $sensor = $temper->device();
 
 if (defined $ARGV[0] && $ARGV[0] eq 'autoconf') {
-    if(defined $sensor->internal()){
+    if(defined $sensor){
 	print "yes\n";
 	exit(0);
     } else {
@@ -45,17 +45,19 @@ if (defined $ARGV[0] && $ARGV[0] eq 'autoconf') {
 
 if (defined $ARGV[0] && $ARGV[0] eq 'config') {
 print <<EOM;
-graph_title Raspberry Pi CPU temperature
+graph_title HidTEMPer temperature
 graph_args --base 1000 -l 0
 graph_vlabel temp in °C 
 graph_category sensors
-cpu.label CPU Temperature
-graph_info This graph shows the CPU temperature in degrees Celsius of a Raspberry Pi. 
+HidTEMPer.label HidTEMPer Temperature
+graph_info This graph shows the HidTEMPer in degrees celsius.
 EOM
 } 
-else {
+elsif(defined $sensor) {
 	print "HidTEMPer.value ", $sensor->internal()->celsius();
 }
-
+else{
+	print "HidTEMPer.value U";
+}
 
 #**}

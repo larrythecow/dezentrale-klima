@@ -51,6 +51,10 @@ EOM
 else {
 	#** @var $temp stores unformated temperature string
 	my $temp = `/opt/vc/bin/vcgencmd measure_temp`;
-	$temp =~ m/^temp=(.*)'C$/;
-	print "cpu.value ", $1;
+	if($temp =~ m/^temp=(.*)'C$/){
+		print "cpu.value ", $1;
+	}
+	else{
+		print "cpu.value U";
+	}
 }
