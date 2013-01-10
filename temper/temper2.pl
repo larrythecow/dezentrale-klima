@@ -15,8 +15,13 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
+<<<<<<< HEAD
 #** @file temper2.pl 
 # ........
+=======
+#** @file temper2.pl read temperature from HidTemper and save them 
+# @brief saves data to RRD and generates SVG
+>>>>>>> c1eae4a8ecbd8cf028f8709fc731fd732c0118dc
 #* 
 
 use strict;
@@ -26,13 +31,25 @@ use RRDs;
 use Fcntl;
 use FileHandle();
 use Device::USB::PCSensor::HidTEMPer;
+use Data::Dumper;
 
+#** @var $temper stores sensor object
 my $temper = Device::USB::PCSensor::HidTEMPer->new();
+
+#** @var $sensor stores the connected sensor
 my $sensor = $temper->device();
+
+#** @var $err saves error
 my $err;
+
+#** @var $curTemp stores temperature
 my $curTemp;
+our $DEBUG = 1;
+
+#** @var $DEBUG flag
 our $DEBUG=1;
 
+#** @var rrd configuration
 our %config =( 
     (filename       => "office"),
     (createDB       => 0),
@@ -59,7 +76,6 @@ sub param(){
         else{
             die print "$tmp[0] undefined\n";
             }
-
         }
 
     if($DEBUG){
@@ -67,7 +83,7 @@ sub param(){
         foreach my $name(sort keys %config){
             print "$name <=> $config{$name}\n";
         }
-        print "################\n\n" 
+        print "################\n\n";
     }
 }
 
@@ -128,7 +144,7 @@ sub drawGraph(){
 sub checkSensor(){
     if( defined $sensor->internal() ) {
         }
-    }
+}
 
 sub updateDB(){
     RRDs::update(
@@ -136,21 +152,17 @@ sub updateDB(){
         join(":" , time, $curTemp )
         );
     die "ERROR while updating: $err\n" if $err;
-    }
+}
 
 param();
 checkSensor();
 createDB();
 
-while(1)
-{
+while (1) {
     $curTemp = $sensor->internal()->celsius();
 
     updateDB();
     drawGraph();
-    print "curTemp: ", join(":" , time, $curTemp ) , "\n";
+    print "curTemp: ", join(":", time, $curTemp ), "\n";
     sleep 15;
 }
-
-
-
