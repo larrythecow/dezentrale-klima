@@ -1,6 +1,6 @@
 #!/usr/bin/perl -w
 
-#** @file bcm2708_temp.pl
+#** @file HidTEMPer.pl
 # @verbatim
 #####################################################################
 # This program is not guaranteed to work at all, and by using this  #
@@ -10,24 +10,31 @@
 # license (see the LICENSE file) and this notice, disclaimer and    #
 # comment box remain intact and unchanged.                          #
 #                                                                   #
-# Class:       bcm2708                                              #
-# Description: munin plugin for Raspberry Pi CPU sensor             #
+# Class:       bcmHidTEMPer                                         #
+# Description: munin plugin for HidTEMPer sensor                    #
 #                                                                   #
 # Written by:  Imran Shamshad (sid@projekt-turm.de)                 #
 ##################################################################### 
 # @endverbatim
 #
 # @copy 2011, Imran Shamhad (sid@projekt-turm.de)
-# $Id: bcm2708_temp.pl
+# $Id: $HidTEMPer.pl
 #*
 
-
-use Munin::Plugin;
 use strict;
 use warnings;
+use Munin::Plugin;
+use Device::USB::PCSensor::HidTEMPer;
+
+
+#** @var $temper stores HidTemper Object
+my $temper = Device::USB::PCSensor::HidTEMPer->new();
+
+#** @var $sensor stores stores HidTemper sensor
+my $sensor = $temper->device();
 
 if (defined $ARGV[0] && $ARGV[0] eq 'autoconf') {
-    if(-r '/opt/vc/bin/vcgencmd') {
+    if(defined $sensor->internal()){
 	print "yes\n";
 	exit(0);
     } else {
@@ -39,18 +46,16 @@ if (defined $ARGV[0] && $ARGV[0] eq 'autoconf') {
 if (defined $ARGV[0] && $ARGV[0] eq 'config') {
 print <<EOM;
 graph_title Raspberry Pi CPU temperature
-graph_info This graph shows the CPU temperature in degrees Celsius of a Raspberry Pi.
-graph_category sensors
 graph_args --base 1000 -l 0
 graph_vlabel temp in °C 
+graph_category sensors
 cpu.label CPU Temperature
-cpu.warning 50.0
-cpu.critical 60.0
+graph_info This graph shows the CPU temperature in degrees Celsius of a Raspberry Pi. 
 EOM
-}
+} 
 else {
-	#** @var $temp stores unformated temperature string
-	my $temp = `/opt/vc/bin/vcgencmd measure_temp`;
-	$temp =~ m/^temp=(.*)'C$/;
-	print "cpu.value ", $1;
+	print "HidTEMPer.value ", $sensor->internal()->celsius();
 }
+
+
+#**}

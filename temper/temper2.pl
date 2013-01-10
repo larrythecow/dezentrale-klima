@@ -15,13 +15,8 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 
-<<<<<<< HEAD
-#** @file temper2.pl 
-# ........
-=======
 #** @file temper2.pl read temperature from HidTemper and save them 
 # @brief saves data to RRD and generates SVG
->>>>>>> c1eae4a8ecbd8cf028f8709fc731fd732c0118dc
 #* 
 
 use strict;
