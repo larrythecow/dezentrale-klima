@@ -21,19 +21,20 @@
 # $Id: bcm2708_temp.pl
 #*
 
-
-use Munin::Plugin;
 use strict;
 use warnings;
 
+use sensors;
+use Munin::Plugin;
+
 if (defined $ARGV[0] && $ARGV[0] eq 'autoconf') {
-    if(-r '/opt/vc/bin/vcgencmd') {
-	print "yes\n";
-	exit(0);
-    } else {
-	print "no\n";
-	exit(1);
-    }
+	if(-r '/opt/vc/bin/vcgencmd') {
+		print "yes\n";
+		exit(0);
+	} else {
+		print "no\n";
+		exit(1);
+	}
 }
 
 if (defined $ARGV[0] && $ARGV[0] eq 'config') {
@@ -47,14 +48,9 @@ cpu.label CPU Temperature
 cpu.warning 50.0
 cpu.critical 60.0
 EOM
+exit(0);
 }
-else {
-	#** @var $temp stores unformated temperature string
-	my $temp = `/opt/vc/bin/vcgencmd measure_temp`;
-	if($temp =~ m/^temp=(.*)'C$/){
-		print "cpu.value ", $1;
-	}
-	else{
-		print "cpu.value U";
-	}
+else{  
+        print "cpu.value ", bcm2708Temp(2);
+        exit(1);
 }
