@@ -51,5 +51,5 @@ EOM
 exit(0);
 }
 else{
-	print "HidTEMPer.value ", HidTEMPer_temp(2);
+	print "HidTEMPer.value ", HidTEMPerTemp(2);
 }
