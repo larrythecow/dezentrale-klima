@@ -1,18 +1,18 @@
-# "package" is the namespace where the module's functionality/data resides. 
-# It dictates the name of the file if you want it to be "use"d.
-# If more than one word, it constrains the location of the module.
-
 package sensors;
 use strict;
 use warnings;
 use Device::USB::PCSensor::HidTEMPer;
+use base 'Exporter';
 
+#** @var @EXPORT DESCTIPTION!!!!!!!!!!!!!!!!!N!!!!!!!!!!!!!!!!!
+our @EXPORT = qw(checkTemp bcm2708Temp HidTEMPerTemp);
+
+#** @var $tolerance tolarance between $temp1 and $temp2 
+my $tolerance = 3;
 #** @var $temp1 temperature which will be compared
 my $temp1;
 #** @var $temp2 temperature which will be compared
 my $temp2;
-#** @var $tolerance tolarance between $temp1 and $temp2 
-my $tolerance = 3;
 
 #** @method public checkTemp ($_[0] $_[1] $_[2])
 # @brief compares tow temperature value and return U if they are to different
@@ -47,7 +47,7 @@ sub checkTemp{
 # @retval 'float NUM' if no error
 # @retval 'char U' if error
 #* 
-sub HidTEMPer_temp{
+sub HidTEMPerTemp{
 	if( (defined $_[2]) ){
 		$tolerance = $_[2];
 	}	

@@ -21,6 +21,8 @@
 # $Id: $HidTEMPer.pl
 #*
 
+BEGIN { push @INC, '/root/dezentrale-klima/munin' }
+
 use strict;
 use warnings;
 

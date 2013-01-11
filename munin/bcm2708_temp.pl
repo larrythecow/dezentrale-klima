@@ -21,6 +21,7 @@
 # $Id: bcm2708_temp.pl
 #*
 
+BEGIN { push @INC, '/root/dezentrale-klima/munin' }
 use strict;
 use warnings;
 
