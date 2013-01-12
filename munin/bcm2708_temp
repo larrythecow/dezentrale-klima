@@ -46,8 +46,8 @@ graph_info			This graph shows the CPU temperature in degrees Celsius of a Raspbe
 graph_category		sensors
 graph_vlabel		temp in °C 
 cpu.label			CPU Temperature
-cpu.warning			50.0
-cpu.critical		60.0
+cpu.warning			70.0
+cpu.critical			80.0
 EOM
 exit(0);
 }
