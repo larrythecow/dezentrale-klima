@@ -1,11 +1,14 @@
 package sensors;
+
 use strict;
 use warnings;
+
 use Device::USB::PCSensor::HidTEMPer;
 use base 'Exporter';
+use Data::Dumper;
 
-#** @var @EXPORT DESCTIPTION!!!!!!!!!!!!!!!!!N!!!!!!!!!!!!!!!!!
-our @EXPORT = qw(checkTemp bcm2708Temp HidTEMPerTemp);
+#** @var @EXPORT functions which will be exported 
+our @EXPORT = qw(checkTemp bcm2708Temp HidTEMPerTemp ds1920Temp);
 
 #** @var $tolerance tolarance between $temp1 and $temp2 
 my $tolerance = 3;
@@ -15,7 +18,7 @@ my $temp1;
 my $temp2;
 
 #** @method public checkTemp ($_[0] $_[1] $_[2])
-# @brief compares tow temperature value and return U if they are to different
+# @brief compares two temperature value and return U if they are to different
 # @param required $_[0] temperature1
 # @param required $_[1] temperature2
 # @param optional $_[2] tolerance, default=3
@@ -40,10 +43,10 @@ sub checkTemp{
 	}
 }
 
-#** @function public HidTEMPer_temp ($_[0])
+#** @function public HidTEMPerTemp ($_[0])
 # @brief HidTEMPer temperature 
 # @param optional $_[0] tolerance
-# @todo add uniqID of sensor to params, print warnings and check if they are in logs, add optional sleep
+# @todo add uniqID of sensor to params
 # @retval 'float NUM' if no error
 # @retval 'char U' if error
 #* 
@@ -75,7 +78,7 @@ sub HidTEMPerTemp{
 	return (checkTemp($temp1, $temp2, $tolerance));
 }
 
-#** @function public bcm2708Tempi ($_[0])
+#** @function public bcm2708Temp ($_[0])
 # @brief get bcm2708 temperature 
 # @param optional $_[0] tolerance
 # @retval 'float NUM' if no error
@@ -84,6 +87,10 @@ sub HidTEMPerTemp{
 sub bcm2708Temp{
         if( !(-r '/opt/vc/bin/vcgencmd') ){
 		return "U";
+        }
+
+        if( (defined $_[0]) ){
+                $tolerance = $_[0];
         }
 	
 	$temp1 = `/opt/vc/bin/vcgencmd measure_temp`;
@@ -108,6 +115,29 @@ sub bcm2708Temp{
         return (checkTemp($temp1, $temp2, $tolerance));
 }
 
+#** @function public ds1820Temp ($_[0])
+# @brief DS1820 temperature 
+# @param required $_[0] ID of DS1820
+# @param optional $_[1] tolerance
+# @retval 'float NUM' if no error
+# @retval 'char U' if error
+#* 
+sub ds1920Temp{
+	open(my $fh, "<", "/sys/bus/w1/devices/$_[0]/w1_slave") or return "U";
+	#** @var @temp stores recived string
+	my @temp = <$fh>;
+	close($fh);
+
+	if( !($temp[1]=~ m\t=(.*)\) ){
+		return "U";
+	}
+	if($1 < -55000 || $1 > 125000){
+		return "U";
+	}
+	else{
+		return $1/1000;
+	}
+}
 
 # A Perl module must end with a true value or else it is considered not to
 # have loaded.  By convention this value is usually 1 though it can be
