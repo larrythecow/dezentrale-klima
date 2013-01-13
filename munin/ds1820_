@@ -40,7 +40,7 @@ if( !($0=~ m\ds1820_(.*)\) ){
 $sensor = $1;
 
 if (defined $ARGV[0] && $ARGV[0] eq 'autoconf') {
-	if( !(ds1920Temp($sensor) eq "U") ){
+	if( !(ds1820Temp($sensor) eq "U") ){
 		print "yes\n";
 		exit(0);
 	} else {
@@ -63,5 +63,5 @@ EOM
 exit(0);
 }
 else{
-	print "$sensor.value ", ds1920Temp($sensor);
+	print "$sensor.value ", ds1820Temp($sensor);
 }

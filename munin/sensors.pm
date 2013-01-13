@@ -17,13 +17,13 @@ my $temp1;
 #** @var $temp2 temperature which will be compared
 my $temp2;
 
-#** @method public checkTemp ($_[0] $_[1] $_[2])
+#** @function public checkTemp ($temp1, $temp2, $tolerance)
 # @brief compares two temperature value and return U if they are to different
-# @param required $_[0] temperature1
-# @param required $_[1] temperature2
-# @param optional $_[2] tolerance, default=3
-# @retval 'float NUM' if no error
-# @retval 'char U' if error
+# @param required $temp1 temperature1
+# @param required $temp2 temperature2
+# @param optional $tolerance default=3
+# @retval "scalar temperature" if no error
+# @retval "scalar 'U'" if error
 #* 
 sub checkTemp{
 	if( (defined $_[2]) ){
@@ -43,12 +43,12 @@ sub checkTemp{
 	}
 }
 
-#** @function public HidTEMPerTemp ($_[0])
+#** @function public HidTEMPerTemp ($tolerance)
 # @brief HidTEMPer temperature 
-# @param optional $_[0] tolerance
+# @param optional $tolerance
 # @todo add uniqID of sensor to params
-# @retval 'float NUM' if no error
-# @retval 'char U' if error
+# @retval "scalar temperature" if no error
+# @retval "scalar 'U'" if error
 #* 
 sub HidTEMPerTemp{
 	if( (defined $_[2]) ){
@@ -78,11 +78,11 @@ sub HidTEMPerTemp{
 	return (checkTemp($temp1, $temp2, $tolerance));
 }
 
-#** @function public bcm2708Temp ($_[0])
+#** @function public bcm2708Temp ($tolerance)
 # @brief get bcm2708 temperature 
-# @param optional $_[0] tolerance
-# @retval 'float NUM' if no error
-# @retval 'char U' if error
+# @param optional $tolerance default=3
+# @retval "scalar temperature" if no error
+# @retval "scalar 'U'" if error
 #* 
 sub bcm2708Temp{
         if( !(-r '/opt/vc/bin/vcgencmd') ){
@@ -115,14 +115,14 @@ sub bcm2708Temp{
         return (checkTemp($temp1, $temp2, $tolerance));
 }
 
-#** @function public ds1820Temp ($_[0])
+#** @function public ds1820Temp ($ID, $tolerance)
 # @brief DS1820 temperature 
-# @param required $_[0] ID of DS1820
-# @param optional $_[1] tolerance
-# @retval 'float NUM' if no error
-# @retval 'char U' if error
+# @param required $ID ID of DS1820
+# @param optional $tolerance default=3
+# @retval "scalar temperature" if no error
+# @retval "scalar 'U'" if error
 #* 
-sub ds1920Temp{
+sub ds1820Temp{
 	open(my $fh, "<", "/sys/bus/w1/devices/$_[0]/w1_slave") or return "U";
 	#** @var @temp stores recived string
 	my @temp = <$fh>;
